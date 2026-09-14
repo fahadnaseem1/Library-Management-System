@@ -4,7 +4,7 @@ public class Book {
     private final String title;
     private final String author;
     private BookStatus status = BookStatus.AVAILABLE;
-    
+
     public String getAuthor() {
         return author;
     }
