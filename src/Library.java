@@ -2,8 +2,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Library {
-    private Map<Integer, Member> members = new HashMap<>();
-    private Map<Integer, Book> books = new HashMap<>();
+    private final Map<Integer, Member> members = new HashMap<>();
+    private final Map<Integer, Book> books = new HashMap<>();
 
     public void addBook(Book book){
         if(books.containsKey(book.getBookId())){
@@ -13,10 +13,11 @@ public class Library {
     }
 
     public void removeBook(int bookId){
-        if(!books.containsKey(bookId)){
+        Book book = books.get(bookId);
+
+        if(book == null ){
             throw new IllegalStateException("book with ID " + bookId + " does not exist");
         }
-        Book book = books.get(bookId);
         if(book.getStatus() == BookStatus.BORROWED){
             throw new IllegalStateException("book with ID "+ bookId +" is borrowed ");
         }
@@ -25,5 +26,28 @@ public class Library {
 
     public Book findBook(int bookId) {
         return books.get(bookId);
+    }
+
+    public void registerMember(Member member){
+        if(members.containsKey(member.getMemberId())){
+            throw new IllegalStateException("member with ID "+ member.getMemberId()+" already exist");
+        }
+        members.put(member.getMemberId(), member);
+    }
+
+    public void removeMember(int memberId){
+        Member member = members.get(memberId);
+
+        if(member == null ){
+            throw new IllegalStateException("member with ID " + memberId + " does not exist");
+        }
+        if(member.getBorrowedBookCount() > 0){
+            throw new IllegalStateException("member with ID "+ memberId + " has borrowed books");
+        }
+        members.remove(memberId);
+    }
+
+    public Member findMember(int memberId){
+        return members.get(memberId);
     }
 }
